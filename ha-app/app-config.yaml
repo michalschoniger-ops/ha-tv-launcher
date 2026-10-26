@@ -1,7 +1,7 @@
-name: "Home TV Launcher"
+name: "HA TV Launcher"
 version: "0.1.0"
 slug: "home_tv_launcher"
-description: "Native TV dashboard bridge for your own Home Assistant."
+description: "Server pro TV launcher s přehledem dat z vašeho Home Assistanta."
 arch:
   - aarch64
   - amd64
@@ -17,7 +17,7 @@ map:
 ports:
   4317/tcp: 4317
 ports_description:
-  4317/tcp: "Local TV dashboard API and preview"
+  4317/tcp: "Místní API a náhled TV přehledu"
 webui: "http://[HOST]:[PORT:4317]/"
 watchdog: "tcp://[HOST]:4317"
 options:

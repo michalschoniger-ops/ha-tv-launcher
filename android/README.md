@@ -1,64 +1,79 @@
-# Home TV — native Android TV launcher
+# HA TV Launcher — nativní launcher pro Android TV
 
-Home TV is a native Canvas launcher with remote-friendly pages, application shortcuts,
-a family calendar, Home Assistant bridge data, room measurements, notifications,
-media playback and map views. The public application ID is `org.hometv.launcher`.
-The source defaults to an unpaired, generic `http://home-tv.local:4317/` bridge;
-no personal server addresses, people, sensor IDs, photos or credentials are shipped.
+HA TV Launcher nabízí nativní nabídku vykreslovanou přes Android Canvas: stránky
+ovládané dálkovým ovladačem, zkratky aplikací, rodinný kalendář, údaje z Home
+Assistantu, měření místností, oznámení, přehrávání médií a mapové přehledy.
+Výchozí připojení míří na obecný, dosud nespárovaný server
+`http://home-tv.local:4317/`. Vlastní server a zdroje dat nastavíš při sestavení
+aplikace a v konfiguraci serveru.
 
-## Build
+## Sestavení
 
-Use JDK 21, Android SDK platform 36 and Build Tools 35.0.0. The wrapper pins Gradle
-8.13; the project uses AGP 8.13.2, Kotlin 2.2.20, JVM 17 and minSdk 24. Install the
-SDK and set `ANDROID_HOME` and `JAVA_HOME` locally before building:
+Potřebuješ JDK 21, Android SDK platformu 36 a Build Tools 35.0.0. Přiložený wrapper
+používá Gradle 8.13; projekt dále AGP 8.13.2, Kotlin 2.2.20, JVM 17 a minSdk 24.
+Nainstaluj SDK a místně nastav `ANDROID_HOME` a `JAVA_HOME`, potom spusť:
 
 ```sh
 ./gradlew -PdashboardUrl=http://home-tv.local:4317/ :app:assembleDebug
 ```
 
-`dashboardUrl` must be one explicit server origin, without user information, path,
-query or fragment. HTTPS is supported. HTTP is allowed only for a private IPv4,
-`localhost`, `.local` or `.home.arpa` host; Android's generated network policy opens
-cleartext traffic only to that exact selected host. No server discovery, previous
-household session migration or network fallback is included.
+`dashboardUrl` musí obsahovat jediný úplný origin serveru: schéma, hostitele
+a případně port, bez přihlašovacích údajů, další cesty, dotazu nebo fragmentu.
+Podporované je HTTPS. HTTP je povolené pouze pro soukromou IPv4, `localhost`,
+`.local` nebo `.home.arpa`; vygenerovaná síťová politika Androidu otevře
+nešifrované spojení jen k přesně zvolenému hostiteli.
 
-Optional `-PtvAbi=armeabi-v7a` or `-PtvAbi=arm64-v8a` limits native libraries.
-WebRTC normally resolves `io.github.webrtc-sdk:android:150.7871.04` from Maven.
-For a pre-provisioned offline build, pass `-PwebrtcAarPath=/path/to/android-150.7871.04.aar`
-and `--offline`; all other Gradle/Android dependencies must already be cached.
-No local AAR path, SDK path, build output or signing key belongs in version control.
-The debug APK is generated under `app/build/outputs/apk/debug/`.
+Volitelně můžeš omezit nativní knihovny parametrem `-PtvAbi=armeabi-v7a` nebo
+`-PtvAbi=arm64-v8a`. WebRTC se běžně načítá z Mavenu jako
+`io.github.webrtc-sdk:android:150.7871.04`.
 
-## Pairing and data
+Pro sestavení bez přístupu k síti použij předem připravený AAR:
 
-The launcher talks only to its configured bridge's fixed API routes. Pair the TV
-with your own bridge after installation. Home Assistant credentials remain on the
-bridge; the Android app stores only its own paired session cookie. Measurements
-are supplied by explicit backend mappings. An unavailable primary sensor is never
-replaced with a regulator reading; regulator mode and measured heating power remain
-separate. No demo measurement is represented as a live value.
+```sh
+./gradlew --offline -PdashboardUrl=http://home-tv.local:4317/ \
+  -PwebrtcAarPath=/cesta/k/android-150.7871.04.aar :app:assembleDebug
+```
 
-Notification overlays require explicit Android overlay/notification permission.
-Door and night-action integrations remain gated by the bridge's available capability,
-preparation and confirmation APIs. This repository contains no configured household
-action, device credential or automatically executed hardware test.
+Ostatní závislosti Gradlu a Androidu už musejí být v místní mezipaměti. Cesty
+k vlastnímu AAR a SDK, sestavovací výstupy ani podpisové klíče neukládej do Gitu.
+Testovací APK vznikne v `app/build/outputs/apk/debug/`.
 
-Google Maps receives only currently available coordinates supplied by your bridge;
-it has no fixed person, home coordinates, fallback location or HA login. Displaying
-Google Maps sends those coordinates to Google. The separate Leaflet/OSM candidate
-also binds only runtime positions and keeps visible map attribution. It is not the
-active map controller by default.
+## Párování a údaje domácnosti
 
-## Experimental cameras
+Po instalaci spáruj televizi s vlastním serverem. Launcher používá jeho předem
+vymezené API. Přihlašovací údaje Home Assistantu zůstávají na serveru; Android
+ukládá jen cookie své spárované relace. Projekt neobsahuje osobní adresy serverů,
+rodinné údaje, skutečná ID domácích čidel, fotografie ani přístupové údaje.
 
-The current camera source includes an **experimental** absolute-clock pacer and
-bounded timing diagnostics. Offline tests and a successful APK build do not prove
-smooth playback, native rendering, device compatibility or physical screen quality.
-Camera pacing has not received full physical acceptance for this public release.
-Validate your own source, codec, device, image fit and timing before relying on it.
-Debug traces are numeric and contain no image buffers or credentials; treat any
-runtime diagnostic export as private operational data.
+Měření vybírá výslovné mapování v konfiguraci serveru. Nedostupné hlavní čidlo
+se nenahrazuje teplotou regulátoru. Režim regulátoru a skutečné vytápění podle
+měřeného příkonu se zobrazují odděleně; ukázková hodnota se nevydává za živé měření.
 
-Third-party notices and bundled licenses are retained in `THIRD_PARTY_NOTICES.md`
-and `app/src/main/assets/licenses/`. No build or verification step installs the app
-or connects to a television, Home Assistant or a production household.
+Oznámení nad ostatními aplikacemi vyžadují oprávnění Androidu pro překryvná okna
+a oznámení. Veřejný server má akce dveří a nočního režimu vypnuté. Jejich případné
+zapojení vyžaduje vlastní ověřenou integraci s přípravou a potvrzením akce.
+
+Google Mapy zobrazují pouze aktuálně dostupné souřadnice dodané tvým serverem;
+žádná osoba ani domácí poloha není vložená napevno. Zobrazením mapy se tyto
+souřadnice předávají Googlu. Samostatný kandidát Leaflet/OSM také pracuje jen
+s polohami z běžícího serveru a zachovává označení poskytovatele mapy. Ve výchozím
+zapojení není aktivním mapovým řadičem.
+
+## Experimentální kamery
+
+Aktuální zdroj kamer obsahuje **experimentální** plánování snímků podle absolutních
+hodin a diagnostiku časování s omezenou pamětí. Offline testy a úspěšné sestavení
+APK nedokazují plynulé přehrávání, dokončení nativního vykreslování, kompatibilitu
+konkrétní televize ani kvalitu fyzického obrazu. Tato veřejná verze nemá úplnou
+přejímku plynulosti kamer na skutečné TV. Ověř vlastní zdroj, kodek, zařízení,
+poměr obrazu a časování. Diagnostické záznamy jsou číselné, bez obrazových bufferů
+a přístupových údajů; jejich exporty přesto uchovávej jako soukromá provozní data.
+
+## Licence a kompatibilita
+
+Podklady třetích stran zůstávají v `THIRD_PARTY_NOTICES.md` a
+`app/src/main/assets/licenses/`. Samotné sestavení a offline testy aplikaci
+neinstalují ani nepřipojují televizi či Home Assistant.
+
+Viditelný název je HA TV Launcher. Kvůli kompatibilitě zůstává ID balíčku
+`org.hometv.launcher`, interní názvy `HomeTV` a schéma `hometv://` zachované.
