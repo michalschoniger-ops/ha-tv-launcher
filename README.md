@@ -2,7 +2,7 @@
 
 Nativní launcher pro Android TV s přehledem domácnosti z Home Assistantu. Ovládá se běžným směrovým ovladačem a hlavní obrazovky se vejdou na televizi bez posouvání.
 
-<!-- VIDEO_PLAYER -->
+https://github.com/user-attachments/assets/1043e4a9-a098-4e9b-b005-e4777946fe8d
 
 [![Přehled původní instalace — kliknutím otevřete video](docs/ukazky/01-prehled.png)](https://github.com/michalschoniger-ops/ha-tv-launcher/raw/refs/heads/main/docs/ukazky/ha-tv-launcher-ukazka.mp4)
 

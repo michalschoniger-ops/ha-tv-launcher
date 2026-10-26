@@ -4,6 +4,8 @@ Ukázka původní instalace; veřejná verze používá vlastní konfiguraci.
 
 ## Video
 
+https://github.com/user-attachments/assets/1043e4a9-a098-4e9b-b005-e4777946fe8d
+
 [![Přehled — otevřít video](01-prehled.png)](https://github.com/michalschoniger-ops/ha-tv-launcher/raw/refs/heads/main/docs/ukazky/ha-tv-launcher-ukazka.mp4)
 
 **[▶ Přehrát nebo stáhnout video](https://github.com/michalschoniger-ops/ha-tv-launcher/raw/refs/heads/main/docs/ukazky/ha-tv-launcher-ukazka.mp4)** — skutečný záznam z TV, přibližně 48 sekund, Full HD H.264, bez zvuku. Snímková frekvence záznamu je proměnná.
