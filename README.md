@@ -79,6 +79,10 @@ The last command verifies that the committed Home Assistant app matches its sour
 
 CI runs Node.js 22 checks and Home Assistant packaging tests. A successful build or automated test does not establish smooth video playback or physical TV compatibility; those need separate device testing. Current boundaries are listed in [known limitations](docs/limitations.md).
 
+## Support development
+
+If this project is useful to you, you can [buy me a coffee ☕](https://ko-fi.com/michalschoniger) and support its continued development. Thank you!
+
 ## License and credits
 
 Project code is licensed under [MIT](LICENSE). Bundled and build-time third-party components retain their own licenses; see [third-party notices](THIRD_PARTY_NOTICES.md).
