@@ -1,49 +1,49 @@
-# Architecture
+# Architektura
 
-## Android TV client
+## Klient Android TV
 
-The main TV interface is a native Kotlin `View`. It draws cards, text, focus and transitions with Android Canvas, using a 1440 × 810 design coordinate space scaled to the real viewport. Cached RenderNodes are recorded at native pixel resolution and invalidated when their geometry or relevant content changes.
+Hlavní rozhraní tvoří nativní Kotlin `View`. Pomocí Android Canvas kreslí karty, text, výběr a přechody. Používá návrhový souřadnicový prostor 1440 × 810 přizpůsobený skutečnému rozlišení. Uchované RenderNode se nahrávají v nativním pixelovém rozlišení a obnovují při změně geometrie nebo příslušného obsahu.
 
-Remote actions are resolved against native focus targets. Android intents launch installed applications. Native Android dialogs handle settings, pairing and details. Camera video uses WebRTC's Android renderer; general media uses Media3. An isolated WebView is used for the optional map, not for the main launcher screen.
+Akce ovladače se přiřazují nativním cílům výběru. Android intenty spouštějí nainstalované aplikace. Nastavení, párování a podrobnosti obsluhují nativní dialogy. Video kamer používá Android renderer WebRTC a běžná média Media3. Volitelná mapa má oddělený WebView; hlavní launcher se vykresluje nativně.
 
-The client talks to one backend origin selected by the Gradle `dashboardUrl` property. Pairing and authenticated API requests use a backend session cookie. The Home Assistant access token is not an Android build parameter.
+Klient komunikuje s jedním backendem vybraným při sestavení přes Gradle vlastnost `dashboardUrl`. Párování a autorizované API požadavky používají relační cookie backendu. Přístupový token Home Assistantu není parametrem Android sestavení.
 
-## Node.js backend
+## Backend Node.js
 
-`server.mjs` serves the browser frontend and the API. The maintained source is in `server.mjs`, `lib/` and `public/`; the Home Assistant app ships a generated copy of that runtime.
+`server.mjs` poskytuje webové rozhraní a API. Udržované zdroje jsou v `server.mjs`, `lib/` a `public/`; aplikace Home Assistantu dodává jejich vygenerovanou kopii.
 
-The backend:
+Backend:
 
-- Reads Home Assistant states, calendar data and camera snapshots through its REST API.
-- Maintains Home Assistant WebSocket subscriptions for notifications, state/event updates and camera signaling.
-- Projects explicitly configured entities into the dashboard contract.
-- Sends live notifications, selected updates and camera signaling events to clients through server-sent events (SSE).
-- Validates sessions, request origins and configured control capabilities before forwarding allowed actions.
+- Čte stavy Home Assistantu, kalendáře a náhledy kamer přes REST API.
+- Udržuje WebSocket připojení pro oznámení, změny stavů/události a signalizaci kamer.
+- Převádí výslovně nakonfigurované entity do datového modelu přehledu.
+- Posílá klientům oznámení, vybrané aktualizace a události signalizace kamer přes server-sent events (SSE).
+- Před předáním povolených akcí kontroluje relaci, origin požadavku a povolené funkce.
 
-The browser frontend supports the demo and management flows. Its existence does not change the Android launcher's native rendering path.
+Webové rozhraní slouží k demonstračnímu režimu a správě. Android launcher používá vlastní nativní vykreslování.
 
-## API entry points
+## Základní API
 
-| Route | Purpose |
+| Cesta | Účel |
 |---|---|
-| `GET /api/bootstrap` | Mode, pairing state and available client features. |
-| `POST /api/pair` | Exchange the configured pairing code for a session cookie. |
-| `POST /api/logout` | Revoke that session. |
-| `GET /api/dashboard` | Dashboard projection; simulated in demo mode, authenticated in live mode. |
-| `GET /api/events` | Authenticated SSE updates. |
-| `POST /api/cameras/:id/webrtc` | Start signaling for an explicitly configured camera. |
-| `/api/webrtc/:sessionId/...` | Owner-bound trickle candidates, events and cleanup. |
+| `GET /api/bootstrap` | Režim, stav párování a dostupné funkce klienta. |
+| `POST /api/pair` | Výměna nakonfigurovaného párovacího kódu za relační cookie. |
+| `POST /api/logout` | Zrušení této relace. |
+| `GET /api/dashboard` | Data přehledu; simulovaná v režimu demo, autorizovaná v režimu live. |
+| `GET /api/events` | Autorizované průběžné aktualizace přes SSE. |
+| `POST /api/cameras/:id/webrtc` | Zahájení signalizace výslovně nakonfigurované kamery. |
+| `/api/webrtc/:sessionId/...` | ICE kandidáti, události a ukončení přenosu vázané na vlastníka relace. |
 
-These are implementation interfaces, not a promise of a stable public API version. Read the corresponding server validation and tests before building another client.
+Jde o implementační rozhraní, ne závazek neměnné veřejné verze API. Před vytvořením dalšího klienta si projděte odpovídající validaci serveru a testy.
 
-## Camera media path
+## Mediální cesta kamer
 
-For WebRTC, the Android client creates an offer, the backend exchanges signaling with Home Assistant, and candidates travel through authenticated HTTP/SSE routes. The resulting media connection uses the camera/Home Assistant integration's WebRTC peer. The Node backend does not decode or re-encode every WebRTC video frame.
+Android klient vytvoří nabídku WebRTC. Backend vymění signalizaci s Home Assistantem a kandidáti procházejí autorizovanými HTTP/SSE cestami. Vlastní média přenáší protistrana WebRTC příslušné integrace kamery/Home Assistantu. Node backend každý snímek WebRTC nedekóduje a znovu nekóduje.
 
-Snapshots and HLS have separate backend endpoints and resource validation. Their successful loading does not establish WebRTC timing or continuous playback quality. A renderer submission counter also does not prove physical screen presentation.
+Náhledy a HLS používají samostatné backendové cesty a validaci zdrojů. Jejich úspěšné načtení samo neověřuje časování WebRTC ani plynulost. Také počet předání rendereru nepotvrzuje fyzické zobrazení snímků na panelu.
 
-## Configuration and persistence
+## Konfigurace a trvalá data
 
-The repository contains generic example configuration with placeholder entities. A live installation supplies its own entity IDs, credentials, pairing secrets and optional photos. Home Assistant app options select its connection and origin; persistent runtime data and session storage are kept outside the shipped runtime.
+Repozitář obsahuje obecnou ukázkovou konfiguraci se zástupnými entitami. Živá instalace dodává vlastní entity, přístupové údaje, párovací klíče a případné fotografie. Volby aplikace Home Assistantu určují připojení a origin; trvalá běhová data a relace se uchovávají mimo dodávaný kód.
 
-The standalone server defaults to a loopback listener. Home Assistant app deployment binds the service inside its container and exposes its configured port. After deployment the TV needs that backend and Home Assistant; a developer workstation is not part of the running system.
+Samostatný server ve výchozím nastavení naslouchá jen lokálně. Aplikace Home Assistantu službu spouští uvnitř kontejneru a zveřejňuje nastavený port. Po nasazení potřebuje televize tento backend a Home Assistant; vývojový počítač není součástí provozu.

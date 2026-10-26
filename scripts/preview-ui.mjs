@@ -51,7 +51,7 @@ const server=http.createServer(async(req,res)=>{
   const filename=path.resolve(publicRoot,'.'+decodeURIComponent(route==='/'?'/index.html':route));
   if(!filename.startsWith(publicRoot)||!mime[path.extname(filename)])return json(res,404,{error:'Not found'});
   let bytes=await readFile(filename);
-  if(filename.endsWith('/index.html'))bytes=Buffer.from(bytes.toString().replace('<title>Home TV</title>','<title>Home TV · oddělený náhled</title>'));
+  if(filename.endsWith('/index.html'))bytes=Buffer.from(bytes.toString().replace('<title>HA TV Launcher</title>','<title>HA TV Launcher · oddělený náhled</title>'));
   res.writeHead(200,{'Content-Type':mime[path.extname(filename)],'Cache-Control':'no-store','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'self'"});res.end(bytes);
  }catch{json(res,404,{error:'Preview resource not available.'});}
 });

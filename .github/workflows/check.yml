@@ -1,4 +1,4 @@
-name: Check
+name: Kontroly
 
 on:
   push:
@@ -20,11 +20,11 @@ jobs:
         with:
           node-version: '22'
           package-manager-cache: false
-      - name: Syntax checks
+      - name: Kontrola syntaxe
         run: npm run check
-      - name: Node tests
+      - name: Testy backendu
         run: npm test
-      - name: Home Assistant app tests
+      - name: Testy aplikace Home Assistant
         run: node --test ha-app/test/*.test.mjs
-      - name: Committed app payload matches source
+      - name: Shoda HA balíčku se zdroji
         run: npm run check:addon

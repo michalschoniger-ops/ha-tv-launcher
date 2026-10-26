@@ -135,7 +135,7 @@ class TvOverlayService : Service() {
         val manager = getSystemService(NotificationManager::class.java)
         if (Build.VERSION.SDK_INT >= 26) manager.createNotificationChannel(
             NotificationChannel(CHANNEL, "Domácí oznámení", NotificationManager.IMPORTANCE_LOW).apply {
-                description = "Spojení se Home TV pro oznámení a zvonek přes ostatní aplikace."
+                description = "Spojení s HA TV Launcherem pro oznámení a zvonek přes ostatní aplikace."
                 setSound(null, null); enableVibration(false); setShowBadge(false)
             }
         )
@@ -144,7 +144,7 @@ class TvOverlayService : Service() {
         @Suppress("DEPRECATION")
         val builder = if (Build.VERSION.SDK_INT >= 26) Notification.Builder(this, CHANNEL) else Notification.Builder(this)
         @Suppress("DEPRECATION")
-        val notification = builder.setSmallIcon(R.drawable.overlay_status_icon).setContentTitle("Home TV")
+        val notification = builder.setSmallIcon(R.drawable.overlay_status_icon).setContentTitle("HA TV Launcher")
             .setContentText("Zobrazení oznámení a zvonku přes TV aplikace.").setOngoing(true).setOnlyAlertOnce(true)
             .setCategory(Notification.CATEGORY_SERVICE).setPriority(Notification.PRIORITY_MIN).setContentIntent(open)
             .addAction(R.drawable.overlay_status_icon, "Zastavit", stop).build()
@@ -236,7 +236,7 @@ class TvOverlayService : Service() {
                 if (!NativeDoorbellPolicy.cameraId(it)) return
                 OverlayProtocol.snapshotUrl(BuildConfig.DASHBOARD_URL, it)
             } else null
-            val title = text(data.optString("title", if (cameraId == null) "Home TV" else "Někdo zvoní"), 120)
+            val title = text(data.optString("title", if (cameraId == null) "HA TV Launcher" else "Někdo zvoní"), 120)
             val message = text(data.optString("message"), 1000)
             if (cameraId == null && message.isBlank()) return
             val id = text(data.optString("id", "${event.type}-$cameraId-$title-$message"), 160)
@@ -313,7 +313,7 @@ class TvOverlayService : Service() {
         val type = if (Build.VERSION.SDK_INT >= 26) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY else WindowManager.LayoutParams.TYPE_PHONE
         val flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or (if (notice.cameraId == null) WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE else 0)
         val params = WindowManager.LayoutParams(NativeNoticeVisuals.px(this, 390f), WindowManager.LayoutParams.WRAP_CONTENT, type, flags,
-            PixelFormat.TRANSLUCENT).apply { gravity = Gravity.TOP or Gravity.END; x = NativeNoticeVisuals.px(this@TvOverlayService, 28f); y = NativeNoticeVisuals.px(this@TvOverlayService, 90f); title = "Home TV oznámení" }
+            PixelFormat.TRANSLUCENT).apply { gravity = Gravity.TOP or Gravity.END; x = NativeNoticeVisuals.px(this@TvOverlayService, 28f); y = NativeNoticeVisuals.px(this@TvOverlayService, 90f); title = "HA TV Launcher oznámení" }
         try { windows.addView(card, params); overlay = card; if (notice.cameraId != null) card.requestFocus(); NativeNoticeVisuals.enter(card) }
         catch (_: RuntimeException) { cameraView = null; cameraStatus = null; noticeVisual = null; Log.w("HomeTVOverlay", "overlay_window_unavailable"); return }
         activeCamera = notice.cameraId

@@ -178,7 +178,7 @@ class NativeTvView(context: Context) : View(context) {
     private fun muted() = if (dark()) Color.rgb(173, 180, 194) else Color.rgb(102, 110, 121)
     private fun glass() = if (dark()) Color.argb(202, 48, 51, 60) else Color.argb(126, 255, 255, 255)
     private fun selectFirstApp() { selection = installed.firstOrNull()?.let { "app:${it.id}" } ?: "tab:${tab.key}"; invalidate() }
-    private fun updateDescription() { contentDescription = "Home TV; tab=${tab.key}; action=$selection; connected=$connected; saver=$saver" }
+    private fun updateDescription() { contentDescription = "HA TV Launcher; tab=${tab.key}; action=$selection; connected=$connected; saver=$saver" }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -325,7 +325,7 @@ class NativeTvView(context: Context) : View(context) {
     }
 
     private fun drawHeader(c: Canvas) {
-        icon(c, "home", 34f, 33f, 23f, ink()); text(c, "Home TV", 68f, 54f, 27f, ink(), 225f, true)
+        icon(c, "home", 34f, 33f, 23f, ink()); text(c, "HA TV Launcher", 68f, 54f, 27f, ink(), 260f, true)
         card(c, RectF(345f, 23f, 996f, 70f), 26f)
         val pillIndex = tabPillFrom + (tab.ordinal - tabPillFrom) * pageProgress
         fill(c, RectF(351f + pillIndex * 106f, 27f, 453f + pillIndex * 106f, 66f), if (dark()) Color.rgb(227, 231, 239) else Color.WHITE, 22f)
@@ -651,7 +651,7 @@ class NativeTvView(context: Context) : View(context) {
     }
 
     private fun drawSaver(c: Canvas) {
-        text(c, "Home TV", 60f, 65f, 27f, ink(), 600f, true)
+        text(c, "HA TV Launcher", 60f, 65f, 27f, ink(), 600f, true)
         if (profile?.isRecycled == false) image(c, profile, RectF(60f, 90f, 125f, 155f), 33f)
         centered(c, format(now, "HH:mm"), 720f, 405f, 136f, ink()); centered(c, format(now, "EEEE d. MMMM yyyy"), 720f, 463f, 26f, ink())
         val title = if (live()) "HA · aktualizováno " + timeLabel(dashboard.string("updatedAt")) else "Aktuální stav domu není ověřený"

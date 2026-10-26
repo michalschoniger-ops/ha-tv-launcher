@@ -166,7 +166,7 @@ internal object NativeNoticeVisuals {
         }
         header.addView(brand, LinearLayout.LayoutParams(px(context, 40f), px(context, 40f)))
         val headings = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL }
-        headings.addView(label(context, if (cameraId == null) "HOME TV" else "HOME TV · ZVONEK", 10f, muted(dark), 1, true))
+        headings.addView(label(context, if (cameraId == null) "HA TV LAUNCHER" else "HA TV LAUNCHER · ZVONEK", 10f, muted(dark), 1, true))
         headings.addView(label(context, title.take(120), 19f, ink(dark), 2, true).apply { setPadding(0, px(context, 5f), 0, 0) })
         header.addView(headings, LinearLayout.LayoutParams(0, -2, 1f).apply { marginStart = px(context, 12f) }); body.addView(header)
         if (message.isNotBlank()) body.addView(label(context, message.take(1000), 14f, muted(dark), 3).apply { setPadding(0, px(context, 12f), 0, 0) })

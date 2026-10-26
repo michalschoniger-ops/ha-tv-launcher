@@ -1,8 +1,8 @@
-Je to vlastní launcher pro Android TV, který vyvíjím s pomocí OpenAI Codex. Hlavní menu je nativní aplikace v Kotlinu, propojená přes samostatný Node.js backend s Home Assistantem. S Home Assistantem komunikuje přes REST API a WebSocket; změny do TV posílá také přes SSE. Živé kamery používají WebRTC. Backend může běžet přímo jako aplikace v Home Assistantu, takže pro provoz televize nemusí být zapnutý počítač.
+Je to vlastní launcher pro Android TV, který vyvíjím s pomocí OpenAI Codex. Projekt se jmenuje HA TV Launcher. Hlavní menu je nativní aplikace v Kotlinu, propojená přes samostatný Node.js backend s Home Assistantem. S Home Assistantem komunikuje přes REST API a WebSocket; změny do TV posílá také přes SSE. Živé kamery používají WebRTC. Backend může běžet přímo jako aplikace v Home Assistantu, takže pro provoz televize nemusí být zapnutý počítač.
 
-Zdrojový projekt jsem dal na GitHub:
-https://github.com/michalschoniger-ops/home-tv-launcher
+Zdrojový projekt, český návod a ukázky původní instalace jsem dal na GitHub:
+https://github.com/michalschoniger-ops/ha-tv-launcher
 
-Je tam návod k instalaci backendu, párování i sestavení vlastního APK pro adresu svého serveru. Každý si nastaví vlastní entity z Home Assistantu. Fyzicky jsem to zatím zkoušel na TCL; Xiaomi TV nebo box bude potřeba ověřit na konkrétním zařízení. Kamerové přenosy dál ladím, takže u nich neslibuji stejný výsledek na každé televizi.
+Je tam postup instalace backendu, párování i sestavení vlastního APK pro adresu svého serveru. Každý si nastaví vlastní entity z Home Assistantu. Fyzicky jsem to zatím zkoušel na TCL; Xiaomi TV nebo box bude potřeba ověřit na konkrétním zařízení. Kamerové přenosy dál ladím, takže u nich neslibuji stejný výsledek na každé televizi.
 
 Veřejná verze obsahuje přehledy a nastavitelné ovládání světel a teploty. Otevírání zámku a původní noční makro do ní zahrnuté nejsou.

@@ -1,5 +1,5 @@
-# Optional generic rest_command definitions. Nothing is installed automatically.
-# Values belong in your own HA secrets.yaml, never in a public repository.
+# Volitelné obecné definice rest_command. Nic se neinstaluje automaticky.
+# Vlastní hodnoty patří do soukromého HA secrets.yaml.
 rest_command:
   home_tv_notify:
     url: !secret home_tv_notify_url
@@ -9,7 +9,7 @@ rest_command:
     content_type: application/json
     timeout: 10
     payload: >-
-      {{ {"title": title | default("Home TV"),
+      {{ {"title": title | default("HA TV Launcher"),
            "message": message,
            "type": notification_type | default("info"),
            "durationSeconds": duration_seconds | default(12) | int(12)} | to_json }}

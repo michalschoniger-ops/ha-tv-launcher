@@ -1,25 +1,25 @@
-# Known limitations
+# Známá omezení
 
-This is a source project developed and physically exercised on a TCL Android/Google TV installation. There is no completed compatibility matrix for Xiaomi TVs/boxes or other manufacturers. The declared Android minimum SDK describes build compatibility, not a guarantee that every TV firmware supports the same launcher, overlay, remote or media behavior.
+Projekt byl vyvíjený a fyzicky zkoušený na instalaci TCL s Android/Google TV. Ověření pro Xiaomi TV/boxy ani ostatní výrobce zatím není hotové. Deklarované minimální SDK Androidu popisuje sestavitelnost, nikoli záruku stejného chování launcheru, překryvných oznámení, ovladače nebo médií na každém firmwaru.
 
-## Camera playback is experimental
+## Kamerové přenosy jsou experimentální
 
-Camera integrations, codecs and hardware decoders differ. HD playback includes timing/queue behavior that still needs device testing. Automated tests, decoded-frame counts, network statistics and renderer submissions measure different parts of that path. None alone proves smooth visible motion on a TV.
+Integrace kamer, kodeky a hardwarové dekodéry se liší. Časování a práce s frontou u HD přehrávání stále potřebují zkoušky na konkrétních zařízeních. Automatické testy, počty dekódovaných snímků, síťové statistiky a předání rendereru měří odlišné části přenosu. Žádný z těchto ukazatelů sám nepotvrzuje plynulý viditelný pohyb na televizi.
 
-Compare playback under consistent conditions, including whether screen mirroring or recording is active. Use a moving scene on the physical screen and report decoder errors, freezes, queue drops and renderer behavior separately. The project does not claim that disabling a mirror fixes all playback problems.
+Přehrávání srovnávejte za stejných podmínek, včetně stavu zrcadlení či záznamu obrazovky. Sledujte pohybující se scénu na fyzické obrazovce a odděleně zaznamenejte chyby dekodéru, zastavení obrazu, ztráty fronty a chování rendereru. Samotné vypnutí zrcadlení není obecnou opravou přehrávání.
 
-## Installation-specific features
+## Funkce závislé na konkrétní instalaci
 
-The room data model supports explicit mappings, but a useful dashboard still requires your own entity IDs and real sensor units. Readouts and configured light/temperature controls are included. Security projections, voice commands and vacuum integrations can require code adaptation as well as configuration.
+Model místností umožňuje výslovné přiřazení zdrojů. Použitelný přehled přesto vyžaduje vlastní entity a skutečné jednotky čidel. Čtení stavů i nastavitelné ovládání světel a teploty jsou součástí projektu. Přehled zabezpečení, hlasové povely nebo integrace vysavače mohou vedle konfigurace vyžadovat také přizpůsobení kódu.
 
-Physical door unlatching and the original household night macro are not included in this public edition. Their implementations are unavailable stubs: they return an unavailable response without sending Home Assistant requests. Enabling such functions requires a separately reviewed implementation for the intended installation. The native UI uses the backend capabilities to keep unavailable actions disabled.
+Fyzické otevření zámku a původní domácí noční makro ve veřejné verzi nejsou. Zástupné implementace vracejí nedostupnost a neposílají požadavky Home Assistantu. Doplnění těchto funkcí vyžaduje samostatně prověřenou implementaci pro zamýšlenou instalaci. Nativní rozhraní se řídí možnostmi backendu a nedostupné akce nechává zakázané.
 
-The UI currently uses Czech text and some calendar/household formatting follows `Europe/Prague`. Broader localization and timezone configurability need further work.
+Rozhraní je nyní česky a část formátování kalendáře/domácnosti používá `Europe/Prague`. Další jazyky a širší nastavení časového pásma potřebují dopracovat.
 
-Optional maps require an Internet connection and their providers' service availability. Google Maps and OpenStreetMap resources have their own terms and attribution requirements. A packaged Leaflet map candidate is included in the source; its presence does not establish that it is the active map controller in every build.
+Volitelné mapy vyžadují internet a dostupnou službu poskytovatele. Google Maps a OpenStreetMap mají vlastní podmínky a povinné uvedení zdroje. Zdrojový projekt obsahuje také kandidátní mapové podklady Leaflet; jejich přítomnost sama neznamená, že daný mapový řadič používá každé sestavení.
 
-## Builds and tests
+## Sestavení a testy
 
-This repository distributes source and public third-party assets. Each user builds an APK for their own backend origin and deployment. There is no ready-to-install APK configured for an arbitrary Home Assistant system.
+Repozitář obsahuje zdrojové kódy, veřejné podklady třetích stran a výslovně zveřejněné [ukázky původní instalace](ukazky/README.md). Každý uživatel si sestaví APK pro svůj backend a vlastní nasazení. Hotové APK přednastavené pro libovolný Home Assistant se zde nedodává.
 
-CI checks Node code and Home Assistant packaging. Android compilation is a separate check, followed by remote-navigation and playback checks on the intended device. A passing test suite is not a physical installation or hardware acceptance test.
+CI kontroluje Node kód a balík Home Assistantu. Android kompilace je samostatný krok, po kterém následuje ověření ovladače a přehrávání na cílovém zařízení. Prošlá sada testů není fyzickou instalací ani přejímkou hardwaru.

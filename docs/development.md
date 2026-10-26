@@ -1,6 +1,6 @@
-# Development
+# Vývoj
 
-Use Node.js 22 for backend work. There are no npm runtime dependencies to install in the current package.
+Pro backend použijte Node.js 22. Aktuální balík nemá běhové závislosti z npm, které by bylo potřeba instalovat.
 
 ```sh
 npm run check
@@ -8,37 +8,37 @@ npm test
 node --test ha-app/test/*.test.mjs
 ```
 
-The first command checks JavaScript syntax. The other commands run backend/frontend-contract and Home Assistant app packaging/startup tests. CI uses the same Node version. Test counts can change as the source evolves, so this document does not substitute a historical count for the current run.
+První příkaz kontroluje syntaxi JavaScriptu. Další spouštějí testy backendu, datových dohod webového rozhraní a balení/spouštění aplikace Home Assistantu. CI používá stejnou verzi Node.js. Počet testů se s vývojem mění, proto zde historické číslo nenahrazuje výsledek aktuálního běhu.
 
-## Generated Home Assistant app
+## Generovaný balík Home Assistantu
 
-`ha-app/` contains the packaging source. Its `app-config.yaml` is mapped to `config.yaml` by the packager. Only the complete, committed `addon/config.yaml` is intended for App Store discovery.
+`ha-app/` obsahuje udržované zdroje balení. Jeho `app-config.yaml` se při balení mění na `config.yaml`. Pro nalezení aplikace v App Store je určený pouze úplný verzovaný `addon/config.yaml`.
 
-After changing runtime or packaging files, generate into a fresh directory:
+Po úpravě běhových či balicích souborů vygenerujte nový adresář:
 
 ```sh
-node ha-app/prepare-package.mjs ./dist/home-tv-launcher-app
+node ha-app/prepare-package.mjs ./dist/ha-tv-launcher-app
 ```
 
-Use that generated payload to update `addon/`, then run:
+Výsledkem aktualizujte `addon/` a spusťte:
 
 ```sh
 npm run check:addon
 ```
 
-The parity check compares shipped payload/metadata independently of generated timestamps. Do not copy `.env`, personal `config.json`, photos, recordings, session stores or a developer's runtime directory into `addon/`. The packager selects maintained source files and produces a file manifest.
+Kontrola porovnává dodávané soubory a metadata nezávisle na čase vytvoření. Do `addon/` nekopírujte `.env`, osobní `config.json`, fotografie, záznamy, relace ani vývojářský běhový adresář. Packager vybírá udržované zdroje a vytváří soupis souborů s kontrolními součty. Veřejné demonstrační snímky a video patří do `docs/ukazky/`, mimo běhový balík.
 
-## Android client
+## Android klient
 
-The Android project includes its Gradle wrapper. Build your own debug APK using an explicit backend origin:
+Android projekt obsahuje vlastní Gradle wrapper. Vývojové APK sestavte s výslovně zvolenou adresou backendu:
 
 ```sh
 cd android
 ./gradlew :app:assembleDebug -PdashboardUrl='http://home-tv.local:4317/'
 ```
 
-Use the SDK/JDK prerequisites in [setup](setup.md) and [android/README.md](../android/README.md). Native protocol checks are separate from a device test. For rendering changes, compare direct screenshots at the device's actual resolution and measure the same remote-key sequence before and after. For cameras, distinguish input/decode, queue submission, native rendering and visible motion.
+Požadavky na SDK/JDK najdete v [instalaci](setup.md) a [android/README.md](../android/README.md). Testy nativních protokolů jsou oddělené od zkoušky na TV. U vykreslování srovnávejte přímé snímky ve skutečném rozlišení zařízení a před/po měřte stejnou sekvenci tlačítek. U kamer rozlišujte vstup/dekódování, předávání z fronty, nativní vykreslení a viditelný pohyb.
 
-## Reporting a problem
+## Hlášení problému
 
-Include your Android/TV model and OS, application version, backend version, affected view and reproduction steps. A small configuration fragment with invented entity names is preferable to an unfiltered household export. Remove tokens, pairing codes, network addresses, person locations, private calendar entries and images from shared logs.
+Uveďte model a OS TV/Androidu, verzi aplikace a backendu, dotčenou obrazovku a postup opakování. Přiložte malou část konfigurace se smyšlenými názvy entit místo úplného exportu domácnosti. Ze sdílených logů odstraňte tokeny, párovací kódy, síťové adresy, polohy osob, soukromé záznamy kalendáře a obrázky.

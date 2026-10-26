@@ -1,34 +1,34 @@
-# Installation and pairing
+# Instalace a párování
 
-You need a TV that can install Android TV applications, a backend reachable from that TV, and your own Home Assistant entity configuration. Start with the browser demo to inspect the interface before configuring live data.
+Potřebujete televizi umožňující instalaci aplikací Android TV, backend dostupný z této televize a vlastní konfiguraci entit Home Assistantu. Rozhraní si můžete nejprve prohlédnout ve webové ukázce bez živých dat.
 
-## 1. Choose where the backend runs
+## 1. Zvolte umístění backendu
 
 ### Home Assistant App Store
 
-On a Home Assistant installation that supports apps:
+Na instalaci Home Assistantu s podporou aplikací:
 
-1. Open **Settings → Apps → App Store** and the repository management menu.
-2. Add `https://github.com/michalschoniger-ops/home-tv-launcher`.
-3. Install **Home TV Launcher** from that repository.
-4. Set `public_origin` to the address the TV will actually use, including the exposed port. For example, `http://home-tv.local:4317` is suitable only if your own network resolves that name to the backend.
-5. Set your own pairing code, with at least eight characters. Keep it separate from the Home Assistant access token and webhook secret.
-6. Replace or remove the `example_*` entity placeholders with your own mapping and start the app. Installation does not discover rooms automatically.
+1. Otevřete **Nastavení → Aplikace → App Store** a nabídku pro správu repozitářů.
+2. Přidejte `https://github.com/michalschoniger-ops/ha-tv-launcher`.
+3. Z tohoto repozitáře nainstalujte **HA TV Launcher**.
+4. Nastavte `public_origin` na adresu, kterou bude skutečně používat televize, včetně zveřejněného portu. Například `http://home-tv.local:4317` použijte jen tehdy, pokud tento název ve vaší síti vede na backend.
+5. Nastavte vlastní párovací kód s alespoň osmi znaky. Použijte jinou hodnotu než přístupový token Home Assistantu a tajný klíč webhooku.
+6. Nahraďte nebo odstraňte zástupné entity `example_*`, přiřaďte vlastní zdroje a spusťte aplikaci. Místnosti se nevyhledávají automaticky.
 
-The `supervisor` connection uses the runtime credential supplied by Home Assistant. The alternative `direct` connection requires your own `ha_url` and `ha_access_token`. Follow the complete option and persistent-config instructions in [ha-app/README.md](../ha-app/README.md).
+Připojení `supervisor` používá přístupový údaj předaný Home Assistantem za běhu. Alternativa `direct` vyžaduje vlastní `ha_url` a `ha_access_token`. Úplný popis voleb a trvalé konfigurace je v [ha-app/README.md](../ha-app/README.md).
 
-App Store repository installation is described in the [official Home Assistant instructions](https://www.home-assistant.io/common-tasks/os/#installing-a-third-party-app-repository). The checked-in [`addon/`](../addon/) directory contains the deployable build context; [`ha-app/`](../ha-app/) contains its maintained packaging source.
+Přidávání repozitářů popisuje [oficiální návod Home Assistantu](https://www.home-assistant.io/common-tasks/os/#installing-a-third-party-app-repository). Adresář [`addon/`](../addon/) obsahuje nasaditelný sestavovací balík; [`ha-app/`](../ha-app/) obsahuje jeho udržované zdroje.
 
-### Standalone Node.js server
+### Samostatný server Node.js
 
-Use Node.js 22. From the repository root:
+Použijte Node.js 22. V kořeni repozitáře spusťte:
 
 ```sh
 cp .env.example .env
 cp config.example.json config.json
 ```
 
-Edit `.env` with your own settings:
+Do `.env` doplňte vlastní nastavení:
 
 ```dotenv
 HOST=0.0.0.0
@@ -42,13 +42,13 @@ CONFIG_PATH=./config.json
 TV_SESSION_STORE=./private/state/paired-sessions.json
 ```
 
-The host names and credential strings above are placeholders. `TV_PUBLIC_ORIGIN` must match the scheme, host and port used by the TV and browser. Edit `config.json` to reference your own entities, then run `npm start`. When using a reverse proxy, preserve streaming SSE responses and use the same external origin in the Android build.
+Názvy serverů a řetězce přístupových údajů jsou pouze zástupné hodnoty. `TV_PUBLIC_ORIGIN` musí odpovídat protokolu, hostiteli a portu používanému televizí a prohlížečem. V `config.json` nastavte vlastní entity a spusťte `npm start`. Reverzní proxy musí průběžně předávat SSE odpovědi; stejnou vnější adresu pak použijte při sestavení Android aplikace.
 
-`demo` means no Home Assistant connection was supplied. `setup` means the live connection, config or pairing settings are incomplete. `live` means the backend has the required settings; individual entities can still be unavailable. Check each displayed source rather than treating `live` as proof that all devices are online.
+Režim `demo` znamená, že není zadané připojení Home Assistantu. Režim `setup` označuje neúplné připojení, konfiguraci nebo párování. Režim `live` znamená, že backend má potřebné nastavení; jednotlivé entity mohou být stále nedostupné. Dostupnost proto posuzujte pro každý zobrazený zdroj zvlášť.
 
-## 2. Build your TV APK
+## 2. Sestavte vlastní APK pro TV
 
-Install Android Studio or the Android SDK, Android SDK Platform 36 and a JDK compatible with the included Android Gradle Plugin; the project targets Java 17. Open `android/` in Android Studio or use its included Gradle wrapper:
+Nainstalujte Android Studio nebo Android SDK, platformu Android SDK 36 a JDK kompatibilní s přibaleným Android Gradle Pluginem. Projekt cílí na Java 17. Otevřete `android/` v Android Studiu nebo použijte přibalený Gradle wrapper:
 
 ```sh
 cd android
@@ -56,32 +56,32 @@ cd android
   -PdashboardUrl='http://home-tv.local:4317/'
 ```
 
-Replace the URL with your own backend origin. The TV connects to this address directly. HTTP builds allow cleartext only to the explicitly selected LAN host; HTTPS builds use system certificate trust. A hostname that resolves on your computer may still need a DNS/network change to resolve on the TV.
+Adresu nahraďte vlastní adresou backendu. Televize se připojuje přímo na ni. HTTP sestavení povoluje nešifrované spojení pouze k výslovně zvolenému lokálnímu hostiteli; HTTPS používá důvěryhodné systémové certifikáty. Název dostupný z počítače nemusí být dostupný i z TV, proto případně upravte vlastní DNS nebo síť.
 
-For a smaller device-specific APK you can also pass `-PtvAbi=arm64-v8a` or `-PtvAbi=armeabi-v7a`, after checking the actual device ABI. The output is `android/app/build/outputs/apk/debug/app-debug.apk`, relative to the repository root. It is a development-signed APK; maintain your own signing key for ongoing personal releases.
+Pro menší APK určené konkrétnímu zařízení lze přidat `-PtvAbi=arm64-v8a` nebo `-PtvAbi=armeabi-v7a` podle skutečné ABI zařízení. Výstup je `android/app/build/outputs/apk/debug/app-debug.apk` vzhledem ke kořeni repozitáře. Jde o vývojově podepsané APK; pro vlastní průběžná vydání si udržujte vlastní podpisový klíč.
 
-The application ID is `org.hometv.launcher`. Build tools and native dependencies are fetched from the repositories declared in the Android project; no household APK or private build cache is required.
+Identifikátor aplikace je `org.hometv.launcher`. Sestavovací nástroje a nativní závislosti se stahují z repozitářů uvedených v Android projektu. Soukromá sestavovací cache ani APK původní instalace nejsou potřeba.
 
-## 3. Install and pair
+## 3. Nainstalujte aplikaci a spárujte ji
 
-Transfer the APK to your own TV, or install it through an already authorized Android debugging connection:
+Přeneste APK do vlastní TV, případně jej nainstalujte přes již autorizované připojení Android debugging:
 
 ```sh
 adb install -r android/app/build/outputs/apk/debug/app-debug.apk
 ```
 
-Open **Home TV Launcher**, open its settings/pairing screen, and enter the pairing code configured on your backend. Successful pairing creates a backend session; it does not copy the Home Assistant token into the APK. With a persistent session store, the backend can retain pairing through a restart.
+Spusťte **HA TV Launcher**, otevřete nastavení/párování a zadejte kód svého backendu. Úspěšné párování vytvoří relaci backendu; přístupový token Home Assistantu se do APK nekopíruje. Trvalé úložiště relací umožňuje zachovat párování přes restart backendu.
 
-Select the launcher using the TV's Home-app settings where supported. This selection, overlay permission and remote-key behavior vary by manufacturer. Optional notifications over other applications require the corresponding Android overlay permission.
+Pokud to TV podporuje, vyberte launcher v nastavení domovské aplikace. Tato volba, oprávnění k překryvným oznámením a chování ovladače se liší podle výrobce. Oznámení nad jinými aplikacemi vyžadují odpovídající oprávnění Androidu.
 
-Check Home, arrow navigation, Back, app launch and return, a backend refresh while a different app tile is selected, and any camera profile you intend to use. Hardware playback needs a moving scene and observation on the actual TV. See [limitations](limitations.md).
+Ověřte Home, směrové šipky, Zpět, spuštění aplikace a návrat, obnovení dat backendu při vybrané jiné dlaždici i každý zamýšlený profil kamery. Přehrávání potřebuje zkoušku s pohybující se scénou na skutečné TV. Viz [omezení](limitations.md).
 
-## Maintaining a local Home Assistant package
+## Vlastní lokální balík pro Home Assistant
 
-For a custom checkout, create a new package directory:
+Z vlastního checkoutu lze vytvořit nový balík:
 
 ```sh
-node ha-app/prepare-package.mjs ./dist/home-tv-launcher-app
+node ha-app/prepare-package.mjs ./dist/ha-tv-launcher-app
 ```
 
-The destination must not already exist. Copy the resulting package into your own local Home Assistant apps/addons directory using your installation's supported file access, then reload the App Store. Configuration and credentials belong to that installation's persistent data, rather than the source package. [Development](development.md) describes regenerating the committed `addon/` payload.
+Cílový adresář nesmí předem existovat. Výsledek zkopírujte do vlastního lokálního adresáře aplikací/addonů Home Assistantu postupem podporovaným danou instalací a znovu načtěte App Store. Konfigurace a přístupové údaje patří do trvalých soukromých dat instalace. [Vývojový návod](development.md) popisuje obnovu verzovaného balíku `addon/`.

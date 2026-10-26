@@ -578,7 +578,7 @@ class MainActivity : Activity() {
     private fun showAssistantResult(message: String, confirmation: String?) {
         if (!resumed) return
         assistantDialog?.setOnDismissListener(null); assistantDialog?.dismiss()
-        val builder = AlertDialog.Builder(this).setTitle("Asistent Home TV").setMessage(message.take(2500)).setNegativeButton("Zavřít", null)
+        val builder = AlertDialog.Builder(this).setTitle("Asistent HA TV Launcher").setMessage(message.take(2500)).setNegativeButton("Zavřít", null)
         if (confirmation != null) builder.setPositiveButton("Potvrdit povel") { dialog, _ ->
             if (!assistantBusy) {
                 (dialog as? AlertDialog)?.setOnDismissListener(null)

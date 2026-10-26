@@ -22,7 +22,7 @@ class TvAssistantInput(
     fun showChoice() {
         if (!openDashboardAssistant()) return
         val dialog = AlertDialog.Builder(activity)
-            .setTitle("Asistent Home TV")
+            .setTitle("Asistent HA TV Launcher")
             .setMessage("Jak chceš zadat povel? Hlasový vstup otevře systémové rozpoznávání řeči až po tvém stisknutí.")
             .setPositiveButton("Hlasový povel") { _, _ -> recognizeSpeech() }
             .setNegativeButton("Napsat povel") { _, _ -> showTextInput() }

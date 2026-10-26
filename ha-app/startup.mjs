@@ -6,7 +6,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const SOURCE = path.dirname(fileURLToPath(import.meta.url));
 const LIMIT = 2 * 1024 * 1024;
-const fail = () => new Error('Home TV Launcher: check the private app configuration.');
+const fail = () => new Error('HA TV Launcher: zkontrolujte soukromou konfiguraci aplikace.');
 const record = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 
@@ -207,10 +207,10 @@ export async function start({ source = SOURCE, data = '/data', configImport = '/
   const { createBridge } = await import(pathToFileURL(path.join(source, 'server.mjs')).href);
   const bridge = await createBridge({ root, config, env });
   await new Promise((resolve, reject) => { bridge.server.once('error', reject); bridge.server.listen(4317, '0.0.0.0', resolve); });
-  console.log('Home TV Launcher: local bridge is listening on port 4317.');
+  console.log('HA TV Launcher: místní server naslouchá na portu 4317.');
   for (const signal of ['SIGINT', 'SIGTERM']) process.once(signal, () => { bridge.close().finally(() => process.exit(0)); });
   return bridge;
 }
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  start().catch(() => { console.error('Home TV Launcher could not start. Check app options and private config.'); process.exitCode = 1; });
+  start().catch(() => { console.error('HA TV Launcher se nepodařilo spustit. Zkontrolujte volby aplikace a soukromou konfiguraci.'); process.exitCode = 1; });
 }

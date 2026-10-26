@@ -1,12 +1,12 @@
-# Your Home Assistant mapping
+# Vlastní mapování Home Assistantu
 
-Start with `config.example.json`. For a standalone server, copy it to the untracked `config.json`; for the Home Assistant app, use the persistent-config process documented in [ha-app/README.md](../ha-app/README.md).
+Začněte souborem `config.example.json`. U samostatného serveru jej zkopírujte do neverzovaného `config.json`; u aplikace Home Assistantu použijte postup pro trvalou konfiguraci z [ha-app/README.md](../ha-app/README.md).
 
-The example configuration contains clearly named `example_*` placeholders. Replace or remove them and configure the actual sources you want to display. Home Assistant area names and device names do not automatically establish which sensor measures a particular room.
+Ukázková konfigurace obsahuje zřetelně označené zástupné entity `example_*`. Nahraďte je nebo odstraňte a nastavte zdroje, které chcete zobrazovat. Samotný název oblasti či zařízení Home Assistantu neurčuje, které čidlo měří konkrétní místnost.
 
-## Rooms
+## Místnosti
 
-`domesticPanel.rooms` is the explicit source for room identity and order. Each room can contain environment sensors, one primary climate controller, presence sensors and equipment. For example, the following fragment illustrates the field names; the entity IDs are placeholders:
+`domesticPanel.rooms` výslovně určuje místnosti a jejich pořadí. Každá místnost může obsahovat environmentální čidla, jeden hlavní regulátor, senzory přítomnosti a vybavení. Následující část ukazuje názvy polí; ID entit jsou zástupná:
 
 ```json
 {
@@ -14,7 +14,7 @@ The example configuration contains clearly named `example_*` placeholders. Repla
     "rooms": [
       {
         "id": "example-room",
-        "name": "Example room",
+        "name": "Ukázková místnost",
         "temperatureEntityId": "sensor.example_room_temperature",
         "humidityEntityId": "sensor.example_room_humidity",
         "co2EntityId": "sensor.example_room_co2",
@@ -26,26 +26,26 @@ The example configuration contains clearly named `example_*` placeholders. Repla
 }
 ```
 
-Merge your mappings into the complete configuration rather than replacing unrelated sections with this fragment. A room can be sensor-only; a separate air-conditioning device does not have to become a second room.
+Vlastní přiřazení vložte do úplné konfigurace a zachovejte ostatní nesouvisející části. Místnost může mít pouze měřicí čidla; samostatná klimatizace nemusí tvořit druhou místnost.
 
-For the v2 room projection:
+Pro datový model místností v2 platí:
 
-- The large temperature comes from the explicit temperature sensor. An unavailable sensor does not fall back to the controller's temperature.
-- Humidity, CO₂ and PM2.5 use their own validated source and unit. Unavailable data stays unavailable; zero remains a valid measurement.
-- The controller's target and reported action are distinct from environmental measurements.
-- A confirmed heating label requires an explicitly mapped, valid heater power reading. A requested heating mode is not proof that the physical heater is running.
-- Presence and contacts have true/false/unknown states. Unknown does not mean absent or closed.
+- Velká teplota pochází z výslovně přiřazeného čidla. Nedostupné čidlo se nenahrazuje teplotou regulátoru.
+- Vlhkost, CO₂ a PM2.5 mají vlastní ověřený zdroj a jednotku. Nedostupná hodnota zůstává nedostupná; nula je platné měření.
+- Cíl a hlášený akční stav regulátoru se rozlišují od měření prostředí.
+- Potvrzený údaj „Topí“ vyžaduje platný příkon výslovně přiřazeného topidla. Požadovaný režim topení sám nepotvrzuje fyzický chod.
+- Přítomnost a kontakty mají stavy ano/ne/neznámý. Neznámý stav neznamená nepřítomnost ani zavřený kontakt.
 
-The interface uses pages when configured content exceeds the current screen capacity. It does not require scrolling through a long room list.
+Pokud obsah přesáhne kapacitu obrazovky, rozhraní používá stránky místo posouvání dlouhého seznamu.
 
-## Other panels
+## Další přehledy
 
-Use the existing sections of the example file for calendar/weather, cameras, energy/water, laundry/vacuum, notifications and optional household features. Add only the fields you need. Some integrations require particular Home Assistant entity domains, attributes or units; the normalizers in `lib/` define the accepted contract.
+V ukázkovém souboru použijte odpovídající části pro kalendář/počasí, kamery, energii/vodu, pračku/vysavač, oznámení a volitelné funkce domácnosti. Vyplňte pouze potřebná pole. Některé integrace vyžadují určité domény entit, atributy nebo jednotky; přijatelný formát určují normalizační funkce v `lib/`.
 
-Configured light and temperature controls use the backend's explicit capability model. Other integrations can require code adaptation as well as configuration. Physical door unlatching and the original household night macro are unavailable in the public edition; they require separately reviewed implementations. Read-only sensor mapping alone does not establish a working alarm or vacuum-control workflow. See [known limitations](limitations.md).
+Ovládání světel a teploty se řídí výslovně povolenými funkcemi backendu. Ostatní integrace mohou kromě konfigurace vyžadovat i úpravu kódu. Fyzické otevření zámku a původní domácí noční makro jsou ve veřejné verzi nedostupné; jejich doplnění potřebuje samostatně prověřenou implementaci. Samotné čtení senzorů nezajišťuje funkční ovládání alarmu či vysavače. Viz [známá omezení](limitations.md).
 
-## Origins, pairing and secrets
+## Adresy, párování a tajné údaje
 
-`TV_PUBLIC_ORIGIN` for a standalone server, or `public_origin` in app options, is the backend address used by clients. Build `dashboardUrl` with the same origin. Requests using an unconfigured host/origin can be rejected even when the server is reachable.
+`TV_PUBLIC_ORIGIN` u samostatného serveru nebo `public_origin` ve volbách aplikace určují adresu backendu používanou klienty. Při sestavení nastavte stejný origin do `dashboardUrl`. Požadavek s nepovoleným hostitelem či originem může být odmítnutý i při dostupném serveru.
 
-The Home Assistant token, TV pairing code and webhook secret have different purposes. Set your own values and retain them only in your deployment's private settings. Keep runtime configuration, session stores and photos out of Git commits and shared diagnostic bundles. HTTPS is the appropriate deployment choice when the connection is exposed beyond a trusted local network.
+Token Home Assistantu, párovací kód TV a tajný klíč webhooku mají odlišné účely. Nastavte vlastní hodnoty a uchovávejte je v soukromých volbách nasazení. Běhovou konfiguraci, relace ani fotografie nevkládejte do Git commitů a veřejných diagnostických balíků. Pro spojení mimo důvěryhodnou lokální síť použijte HTTPS.

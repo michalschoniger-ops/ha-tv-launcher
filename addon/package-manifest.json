@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-26T13:05:26.716Z",
+  "generatedAt": "2026-10-26T14:03:33.482Z",
   "privateDataIncluded": false,
   "files": [
     {
@@ -10,13 +10,13 @@
     },
     {
       "path": "runtime/package.json",
-      "bytes": 488,
-      "sha256": "48ae515ffa87170fae1d5ba40bed067bb0478d2bc04676ca349c4846a3ce8d2e"
+      "bytes": 500,
+      "sha256": "8394bc9b3c753cedcf416ab0e2165d79786964a386286445f3aefae258b19bf7"
     },
     {
       "path": "runtime/config.example.json",
-      "bytes": 1527,
-      "sha256": "6b770934e4e0747b53fe5529665d9a7aaa00d77d0beb6cac87f090dd170d7ebf"
+      "bytes": 1534,
+      "sha256": "1fec5cae305b16d3d271d33e7322020f26e3883e19d4e9cfb181cc6052ebe1b1"
     },
     {
       "path": "runtime/assistant-plan.schema.json",
@@ -25,8 +25,8 @@
     },
     {
       "path": "runtime/public/app.js",
-      "bytes": 84514,
-      "sha256": "fc4edb5df7839d671ce4746268f23da78855e637399e13c09c05424b902a6209"
+      "bytes": 84528,
+      "sha256": "64884bcf88a81a0cf7510efd13679346cb90495cd63782d7e67f7806e1a1bd9c"
     },
     {
       "path": "runtime/public/apps/relax/app.js",
@@ -110,8 +110,8 @@
     },
     {
       "path": "runtime/public/index.html",
-      "bytes": 4458,
-      "sha256": "ce6d4bdc10e6ff7f117aed24c7bb431fc1605bb602a46ba1ff0fb75aa538bb61"
+      "bytes": 4474,
+      "sha256": "129e3d0118cd329edc4d79223382674fefbb0f37f6cca39c3ec360044a0eca93"
     },
     {
       "path": "runtime/public/manage.css",
@@ -120,8 +120,8 @@
     },
     {
       "path": "runtime/public/manage.html",
-      "bytes": 8361,
-      "sha256": "b084e0d840973b0d63f17e7cb4e5e1966ff1430da016f01081f6d02b013c000e"
+      "bytes": 8393,
+      "sha256": "65460a64cf5a02e4f6e77ecee806898dfba12900da57bc735bf737fd94f6cd2d"
     },
     {
       "path": "runtime/public/manage.js",
@@ -310,8 +310,8 @@
     },
     {
       "path": "Dockerfile",
-      "bytes": 276,
-      "sha256": "d8595492c596cb281299d1fc5f92f1f5fa7e2d8ffefd2a5bb01e31c15cf6170c"
+      "bytes": 289,
+      "sha256": "91dab6e42dd0ae4fe44ea9da7c928f216f0b11f1af533de07c43148bdf12ded2"
     },
     {
       "path": ".dockerignore",
@@ -320,23 +320,23 @@
     },
     {
       "path": "startup.mjs",
-      "bytes": 13613,
-      "sha256": "098a34d6d357b3ec490255b89bc91c716c516386ad0c9769444566222fcbf0fc"
+      "bytes": 13639,
+      "sha256": "aba20a99a562899c4475f3add6dc1ce3c09763c6e33abb212c31d125f2dfa07b"
     },
     {
       "path": "README.md",
-      "bytes": 4007,
-      "sha256": "f7cfab46669b469d4e6269f21da68b58767ce0628e9a897bc054e255315a73e9"
+      "bytes": 4154,
+      "sha256": "d93eb769f9f027694462c7a870514163d8f79b9727d564cb3f81d90927acc19d"
     },
     {
       "path": "translations/cs.yaml",
-      "bytes": 1433,
-      "sha256": "d99b5ee12a3b3e68050a868ea2e4c51aade04389535414524ff36157bad93d3e"
+      "bytes": 1461,
+      "sha256": "7027c8c2dc755413954f6b80c4aa39d5f2586a3c4147375be23a493765646951"
     },
     {
       "path": "config.yaml",
-      "bytes": 915,
-      "sha256": "db967ae4018475ccb5e0695d948209a63e09addb7816b360f97ee6d035909b6c"
+      "bytes": 925,
+      "sha256": "c56c4db38170553ee504c527f5bdf413dbf377aa7ca9e0fbe8986d7dce5c4151"
     }
   ]
 }

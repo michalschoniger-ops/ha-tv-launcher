@@ -1,72 +1,88 @@
-# Home TV Launcher
+# HA TV Launcher
 
-A native Android TV launcher with a Home Assistant dashboard, built around remote-control navigation and a screen that fits the TV.
+Nativní launcher pro Android TV s přehledem domácnosti z Home Assistantu. Ovládá se běžným směrovým ovladačem a hlavní obrazovky se vejdou na televizi bez posouvání.
 
-The TV client is written in Kotlin and draws its main interface with Android Canvas. A separate Node.js backend reads your Home Assistant installation and provides a browser demo, management pages and the TV API. Deploying that backend on Home Assistant lets the TV run without a development computer.
+<!-- VIDEO_PLAYER -->
 
-This is a source release. Build an APK for **your own backend address** and configure **your own Home Assistant entities**. No preconfigured household APK, personal configuration or photos are included.
+[![Přehled původní instalace — kliknutím otevřete video](docs/ukazky/01-prehled.png)](https://github.com/michalschoniger-ops/ha-tv-launcher/raw/refs/heads/main/docs/ukazky/ha-tv-launcher-ukazka.mp4)
 
-## What it includes
+**[▶ Přehrát nebo stáhnout ukázkové video — Full HD, 48 sekund, bez zvuku](https://github.com/michalschoniger-ops/ha-tv-launcher/raw/refs/heads/main/docs/ukazky/ha-tv-launcher-ukazka.mp4)**
 
-- App launcher, calendar, weather and household views operated with a directional remote.
-- Explicit room mappings for temperature, humidity, CO₂, PM2.5, presence and equipment; missing measurements stay unavailable.
-- Energy, water, laundry and vacuum panels where matching entities are configured.
-- Configurable light and temperature controls through the backend's explicit capability model.
-- Notifications and live updates through the backend's server-sent event stream.
-- Native camera playback through Home Assistant WebRTC signaling, plus camera snapshots and HLS support. **Camera timing and device compatibility remain experimental.**
-- A browser demonstration using simulated data, without Home Assistant credentials.
+*Ukázka původní instalace; veřejná verze používá vlastní konfiguraci.*
 
-The interface currently uses Czech labels. Physical testing has been performed on a TCL Android/Google TV installation. **Xiaomi TVs, Xiaomi TV boxes and other manufacturers have not been verified.** Android version support alone does not guarantee launcher, decoder or remote behavior on another device.
+| Místnosti | Aplikace |
+|---|---|
+| [![Místnosti](docs/ukazky/03-mistnosti.png)](docs/ukazky/03-mistnosti.png) | [![Aplikace](docs/ukazky/07-aplikace.png)](docs/ukazky/07-aplikace.png) |
 
-The public edition includes the readouts and configured controls described above. **Physical door unlatching and the original household night macro are not included.** Their public endpoints remain unavailable and make no Home Assistant requests; implementing either requires a separately reviewed integration for your installation.
+[Prohlédnout všech sedm snímků a video](docs/ukazky/README.md)
 
-## Try the browser demo
+## Jak projekt funguje
 
-Install Node.js 22, then run:
+TV klient je napsaný v Kotlinu a hlavní rozhraní kreslí pomocí Android Canvas. Samostatný backend v Node.js čte vaši instalaci Home Assistantu a poskytuje API pro televizi, webovou ukázku a správu. Backend může běžet přímo jako aplikace v Home Assistantu; vývojový počítač pak není součástí běžného provozu.
+
+Projekt obsahuje zdrojové kódy a obecnou ukázkovou konfiguraci. APK si sestavíte pro **adresu svého backendu** a nastavíte **vlastní entity z Home Assistantu**.
+
+## Co obsahuje
+
+- Spouštění aplikací, kalendář, počasí a přehled domácnosti ovládaný směrovým ovladačem.
+- Výslovné přiřazení čidel teploty, vlhkosti, CO₂, PM2.5, přítomnosti a vybavení k místnostem. Chybějící měření zůstávají nedostupná.
+- Přehled energie, vody, pračky a vysavače podle nakonfigurovaných entit.
+- Nastavitelné ovládání světel a teploty podle povolených funkcí backendu.
+- Oznámení a průběžné aktualizace přes server-sent events (SSE).
+- Nativní kamerový přehrávač se signalizací WebRTC přes Home Assistant, náhledy kamer a podporu HLS. **Časování kamer a kompatibilita zařízení jsou stále experimentální.**
+- Webovou ukázku se simulovanými daty bez přihlašovacích údajů Home Assistantu.
+
+Rozhraní je česky. Fyzické zkoušky proběhly na instalaci TCL s Android/Google TV. **Xiaomi TV, Xiaomi TV boxy ani ostatní výrobci zatím nejsou ověření.** Podporovaná verze Androidu sama nezaručuje stejné chování launcheru, dekodéru nebo ovladače na jiném zařízení.
+
+Veřejná verze obsahuje uvedené přehledy a nastavitelné ovládání. **Fyzické otevření zámku a původní domácí noční makro její součástí nejsou.** Příslušná API zůstávají nedostupná a neposílají požadavky do Home Assistantu. Jejich doplnění vyžaduje samostatně prověřenou implementaci pro konkrétní instalaci.
+
+## Vyzkoušení webové ukázky
+
+Nainstalujte Node.js 22 a spusťte:
 
 ```sh
-git clone https://github.com/michalschoniger-ops/home-tv-launcher.git
-cd home-tv-launcher
+git clone https://github.com/michalschoniger-ops/ha-tv-launcher.git
+cd ha-tv-launcher
 npm start
 ```
 
-Open [http://localhost:4317](http://localhost:4317). With no `HA_URL` or `HA_TOKEN` configured, the server selects its labeled demo mode. The backend currently uses Node's built-in APIs and has no npm runtime dependencies.
+Otevřete [http://localhost:4317](http://localhost:4317). Pokud nejsou nastavené `HA_URL` ani `HA_TOKEN`, server zvolí označený demonstrační režim. Backend nyní používá vestavěná API Node.js a nemá běhové závislosti z npm.
 
-## Use it with your Home Assistant and TV
+## Propojení s vlastní televizí a Home Assistantem
 
-1. Add this repository to the **Home Assistant App Store**, install **Home TV Launcher**, and configure its public origin, pairing and entity mapping. The committed [`addon/`](addon/) directory is the self-contained app build context.
-2. Build the Android client with `dashboardUrl` set to that backend's TV-reachable origin.
-3. Install your APK on the TV and pair it using your backend's pairing code.
+1. Přidejte tento repozitář do **Home Assistant App Store**, nainstalujte **HA TV Launcher** a nastavte adresu služby, párování a vlastní entity. Adresář [`addon/`](addon/) obsahuje samostatný sestavovací balík aplikace.
+2. Sestavte Android klienta s `dashboardUrl` nastaveným na adresu backendu dostupnou z televize.
+3. Nainstalujte vlastní APK do TV a zadejte svůj párovací kód.
 
-Detailed instructions: [installation and pairing](docs/setup.md), [configuration](docs/configuration.md), [Android build notes](android/README.md), and [Home Assistant app](ha-app/README.md).
+Podrobnosti najdete v návodech pro [instalaci a párování](docs/setup.md), [konfiguraci](docs/configuration.md), [sestavení Android aplikace](android/README.md) a [aplikaci Home Assistantu](ha-app/README.md).
 
-Repository URL for the Home Assistant App Store:
+Adresa repozitáře pro Home Assistant App Store:
 
 ```text
-https://github.com/michalschoniger-ops/home-tv-launcher
+https://github.com/michalschoniger-ops/ha-tv-launcher
 ```
 
-For a standalone Node deployment, use the same backend with your own environment settings. [Setup](docs/setup.md) covers both deployment paths.
+Stejný backend lze provozovat i samostatně v Node.js. [Instalační návod](docs/setup.md) popisuje obě možnosti.
 
-## How the pieces connect
+## Propojení jednotlivých částí
 
 ```mermaid
 flowchart LR
-    TV[Android TV client\nKotlin, Canvas, native video]
-    Backend[Node.js backend]
-    HA[Home Assistant]
-    Browser[Browser demo and management]
-    Camera[Camera / WebRTC media peer]
-    TV <-->|HTTP REST and SSE| Backend
-    Browser <-->|HTTP and SSE| Backend
-    Backend <-->|REST and WebSocket| HA
-    HA <-->|Camera signaling| Camera
-    Camera -->|WebRTC media| TV
+    TV["Android TV klient<br/>Kotlin, Canvas, nativní video"]
+    Backend["Backend Node.js"]
+    HA["Home Assistant"]
+    Browser["Webová ukázka a správa"]
+    Camera["Kamera / protistrana WebRTC"]
+    TV <-->|HTTP REST a SSE| Backend
+    Browser <-->|HTTP a SSE| Backend
+    Backend <-->|REST a WebSocket| HA
+    HA <-->|Signalizace kamery| Camera
+    Camera -->|Média WebRTC| TV
 ```
 
-Home Assistant credentials stay on the backend. The TV pairs with the backend and receives its own session. See [architecture](docs/architecture.md) for the media and event paths.
+Přístupové údaje Home Assistantu zůstávají na backendu. Televize se spáruje s backendem a dostane vlastní relaci. Datové a mediální cesty popisuje [architektura](docs/architecture.md).
 
-## Development
+## Vývoj a kontroly
 
 ```sh
 npm run check
@@ -75,12 +91,12 @@ node --test ha-app/test/*.test.mjs
 npm run check:addon
 ```
 
-The last command verifies that the committed Home Assistant app matches its source package. After changing backend code, regenerate that package as described in [development](docs/development.md).
+Poslední příkaz ověřuje shodu dodávané aplikace Home Assistantu se zdrojovým balíkem. Po změně backendu balík znovu vygenerujte podle [vývojového návodu](docs/development.md).
 
-CI runs Node.js 22 checks and Home Assistant packaging tests. A successful build or automated test does not establish smooth video playback or physical TV compatibility; those need separate device testing. Current boundaries are listed in [known limitations](docs/limitations.md).
+CI spouští kontroly pro Node.js 22 a testy balíku Home Assistantu. Úspěšné sestavení nebo automatický test samy nepotvrzují plynulost videa ani kompatibilitu fyzické televize. Tyto vlastnosti potřebují samostatnou zkoušku na zařízení. Aktuální hranice popisují [známá omezení](docs/limitations.md).
 
-## License and credits
+## Licence a autorství
 
-Project code is licensed under [MIT](LICENSE). Bundled and build-time third-party components retain their own licenses; see [third-party notices](THIRD_PARTY_NOTICES.md).
+Vlastní kód projektu je pod licencí [MIT](LICENSE). Přibalené komponenty a sestavovací nástroje si zachovávají své licence; podrobnosti jsou v [informacích o třetích stranách](THIRD_PARTY_NOTICES.md).
 
-Developed by [michalschoniger-ops](https://github.com/michalschoniger-ops) with assistance from **OpenAI Codex**. Home Assistant, Android, Google TV and the named media services are independent projects and products.
+Projekt vyvíjí [michalschoniger-ops](https://github.com/michalschoniger-ops) s pomocí **OpenAI Codex**. Home Assistant, Android, Google TV a uvedené mediální služby jsou samostatné projekty a produkty.

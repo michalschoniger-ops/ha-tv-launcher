@@ -1,13 +1,13 @@
 # Volitelná integrace oznámení z Home Assistant
 
-`home_tv.yaml` obsahuje pouze generické REST příkazy pro oznámení a média. Nemá žádné automatizace, skutečné entity, adresy domácnosti nebo přihlašovací údaje. Nic se automaticky neinstaluje ani neaktivuje.
+`home_tv.yaml` obsahuje obecné REST příkazy pro oznámení a média v aplikaci **HA TV Launcher**. Definice si začleníte do své instalace; samy nevytvářejí automatizace ani neaktivují žádné akce.
 
-Definice začleňte do svého spravovaného HA YAML podle způsobu instalace, doplňte vlastní hodnoty ze `secrets.example.yaml` do soukromého `secrets.yaml`, zkontrolujte konfiguraci a načtěte ji postupem své verze HA. Použijte samostatný `webhook_token` nastavený v aplikaci; nepoužívejte HA přístupový token.
+Definice začleňte do svého spravovaného HA YAML podle způsobu instalace. Podle `secrets.example.yaml` vyplňte vlastní hodnoty do soukromého `secrets.yaml`, zkontrolujte konfiguraci a načtěte ji postupem své verze HA. Pro oznámení použijte samostatný `webhook_token` nastavený v aplikaci.
 
 ```yaml
 action: rest_command.home_tv_notify
 data:
-  title: "Home TV"
+  title: "HA TV Launcher"
   message: "Ukázkové oznámení"
   notification_type: info
   duration_seconds: 12
